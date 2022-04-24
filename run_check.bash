@@ -1,5 +1,12 @@
 #!/bin/bash
 
+### echo usage
+function show_usage () {
+    echo "Usage: $0 [-h]"
+    echo "          [-s <path of dir> or --source_directory <path of dir>]"
+    exit 0;
+}
+
 
 ### initialize option variables
 SOURCE_DIR="${PWD}"
