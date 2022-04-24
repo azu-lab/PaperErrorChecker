@@ -13,7 +13,7 @@ SOURCE_DIR="${PWD}"
 
 
 ### parse command options
-OPT=`getopt -o s: -l source_directory: -- "$@"`
+OPT=`getopt -o hs: -l help,source_directory: -- "$@"`
 
 if [ $? != 0 ] ; then
     echo "[Error] Option parsing processing is failed." 1>&2
@@ -26,6 +26,10 @@ eval set -- "$OPT"
 while true
 do
     case $1 in
+    -h | --help)
+        show_usage;
+        shift
+        ;;
     -s | --sourcne_directory-dir)
         SOURCE_DIR="$2"
         shift 2
