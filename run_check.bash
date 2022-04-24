@@ -45,14 +45,21 @@ done
 ### run check
 TEX_FILES=$( find ${SOURCE_DIR} -name "*.tex" )
 
+echo "---- [Error] ['\cite{X}, \cite{Y}' -> \cite{X, Y}] ----"
+grep --color -En "\\\\cite\{[.+]\}, \\\\cite" ${TEX_FILES}
+
+echo "---- [Error] [Don't use 'in this paper' in abstract] ----"
+grep --color -zoP "\\\\begin\{abstract\}[\s\S]*\\\\end{abstract}" ${TEX_FILES} | grep --color "in this paper"
+
 echo "---- [Error] [Insert a period] ----"
 grep --color -ne "et al " ${TEX_FILES}
 grep --color -Ene "Fig[^u\.]" -Ene "Eq[^s\.]" -Ene "Eqs[^\.]" ${TEX_FILES}
 
 echo "---- [Error] [Insert a comma] ----"
-grep --color -ne "However " -ne "In addtion" -ne "Additionally" -ne "Therefore " ${TEX_FILES}
+grep --color -ne "However " -ne "In addtion" -ne "Additionally " -ne "Therefore " ${TEX_FILES}
 grep --color -ine "Otherwise " ${TEX_FILES}
 grep --color -Fn "e.g. " -Fn "i.e. " ${TEX_FILES}
+grep --color -Pn "\s+[0-9]{4,}" ${TEX_FILES}
 
 echo "---- [Error] [Insert a half-width space] ----"
 grep --color -Ene "[0-9]+ms " -Ene "\S+\\\\cite" -Ene "[a-zA-Z]+\(" -Ene "\)[a-zA-Z]+" ${TEX_FILES}
