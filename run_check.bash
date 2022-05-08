@@ -48,11 +48,6 @@ TEX_FILES=$( find ${SOURCE_DIR} -name "*.tex" )
 echo "---- [Error] ['work' -> 'study'] ----"
 grep --color -n "these work" ${TEX_FILES}
 
-echo "---- [Error] ['a' -> 'an'] ----"
-grep --color -Ene " a [aiueoAIUEO]" -Ene "A [aiueoAIUEO]" -Ene " a \{\\\\it [aiueoAIUEO]" -Ene "A \{\\\\it [aiueoAIUEO]" ${TEX_FILES}
-
-echo "---- [Error] ['an' -> 'a'] ----"
-grep --color -Ene " an [^aiueoAIUEO\{]" -Ene "An [^aiueoAIUEO\{]" -Ene " an \{\\\\it [^aiueoAIUEO]" -Ene "An \{\\\\it [^aiueoAIUEO]" ${TEX_FILES}
 
 echo "---- [Error] ['\cite{X}, \cite{Y}' -> \cite{X, Y}] ----"
 grep --color -En "\\\\cite\{[.+]\}, \\\\cite" ${TEX_FILES}
