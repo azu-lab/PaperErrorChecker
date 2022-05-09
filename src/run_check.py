@@ -3,7 +3,9 @@ import glob
 import os
 import re
 from logging import INFO, Formatter, StreamHandler, getLogger
-from typing import List
+from typing import Dict, List
+
+import yaml
 
 # Logger setting
 handler = StreamHandler()
@@ -30,20 +32,36 @@ def option_parser():
     return args.check_dir
 
 
-class CheckerPerLine():
+class Checker():
     def __init__(
         self,
         file_paths: List[str]
     ) -> None:
-        self._file_paths = file_paths
+        self._target_paths = {"all": file_paths}
+        intro_path = [p for p in file_paths
+                      if "Introduction" in p][0]
+        self._target_paths["introduction"] = intro_path
+        self._target_paths["except for main"] = [p for p in file_paths
+                                                 if 'Main' not in p]
 
     def check(
         self,
         pattern: str,
-        flags=None
+        check_type: str,
+        target: str,
+        flags=None,
+    ) -> List[str]:
+        if(check_type == "line"):
+            return self._check_per_line(pattern, flags, target)
+
+    def _check_per_line(
+        self,
+        pattern: str,
+        flags,
+        target: str
     ) -> List[str]:
         errors = []
-        for tex_path in self._file_paths:
+        for tex_path in self._target_paths[target]:
             with open(tex_path, "r", encoding='utf-8') as f:
                 lines = f.readlines()
             for line_count, line in enumerate(lines):
@@ -66,6 +84,8 @@ def print_log(
     msg: str,
     level: str,
     errors: List[str]
+
+
 ) -> None:
     if(errors):
         if(level == 'info'):
@@ -78,128 +98,38 @@ def print_log(
             raise NotImplementedError
 
         [print(f"\t{error}") for error in errors]
+        print("------------------------------------------------------------")
+
+
+def get_check_args(args_dict: Dict) -> Dict:
+    args = {"pattern": args_dict['pattern']}
+    flags_str = args_dict.get("flags")
+    if(flags_str == "ignorecase"):
+        args['flags'] = re.IGNORECASE
+
+    args["target"] = args_dict.get("target", "all")
+    args["check_type"] = args_dict.get("check type", "line")
+
+    return args
 
 
 def main(check_dir):
     tex_paths = glob.glob(f"{check_dir}/**/*.tex",
                           recursive=True)
-    checker_per_line = CheckerPerLine(tex_paths)
+    checker = Checker(tex_paths)
 
-    # Check per line
-    # ERROR
-    errors = checker_per_line.check(
-        r"(?:^a|\sa) (?:[aiueo]|{\\it [aiueo])", re.IGNORECASE)
-    print_log("'a' -> 'an'", "error", errors)
+    # Load check list
+    with open(
+        f"{os.path.dirname(__file__)}/check_lists/check_list.yaml",
+        'r'
+    ) as f:
+        check_list = yaml.safe_load(f)
 
-    errors = checker_per_line.check(
-        r"(?:^an|\san) (?:[^aiueo]|{\\it [^aiueo])", re.IGNORECASE)
-    print_log("'an' -> 'a'", "error", errors)
-
-    errors = checker_per_line.check(
-        r"\\cite{\w+}, \\cite")
-    print_log("'\\cite{X}, \\cite{Y}' -> \\cite{X, Y}", "error", errors)
-
-    errors = checker_per_line.check(
-        r"et al[^\.]|Fig[^u\.]|Eq[^s\.]|Eqs[^\.]")
-    print_log("Insert a period", "error", errors)
-
-    errors = checker_per_line.check(
-        r"However |In addition |Additionally |Therefore |Here |Otherwise |"
-        r"e\.g\. |i\.e\. |"
-        r" [0-9]{4,}"
-    )
-    print_log("Insert a comma", "error", errors)
-
-    errors = checker_per_line.check(
-        r"[0-9]+ms|\w\\cite|ROS2")
-    print_log("Insert a half-width space", "error", errors)
-
-    errors = checker_per_line.check(
-        r"(?:Fig\.|Figs\.|Figure\.|Figures\.|Eq\.|Eqs\.|"
-        r"Table\.|Tables\.|Algorithm\.|Algorithms\.)[^~]")
-    print_log("Insert a tilde", "error", errors)
-
-    errors = checker_per_line.check(
-        r"[0-9]+ %|\w :")
-    print_log("Remove a half-width space", "error", errors)
-
-    errors = checker_per_line.check(
-        r"each (?:a|an|the)|"
-        r"(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section)")
-    print_log("Remove an article", "error", errors)
-
-    errors = checker_per_line.check(
-        r"(?:are|is) (?:existing|having)|"
-        r", (?:however|therefore|then|thus|thereby)")
-    print_log("Grammar errors", "error", errors)
-
-    errors = checker_per_line.check(
-        r"works")
-    print_log("Uncountable noun", "error", errors)
-
-    errors = checker_per_line.check(
-        r"==")
-    print_log("'==' -> '='", "error", errors)
-
-    errors = checker_per_line.check(
-        r"<=|>=")
-    print_log("'<=' or '>=' -> '\\leq' or '\\geq'", "error", errors)
-
-    errors = checker_per_line.check(
-        r"Acknowledgements")
-    print_log("'Acknowledgements' -> 'Acknowledgments'", "error", errors)
-
-    errors = checker_per_line.check(
-        r"self-driving card")
-    print_log("'self-driving car' -> 'autonomous vehicles'", "error", errors)
-
-    errors = checker_per_line.check(
-        r"was proposed")
-    print_log("'was proposed' -> 'has been proposed'", "error", errors)
-
-    errors = checker_per_line.check(
-        r"GPS")
-    print_log("'GPS' -> 'Global Navigation Satellite System (GNSS)'",
-              "error", errors)
-
-    # WARNING
-    errors = checker_per_line.check(
-        r"don't|hasn't|doesn't|can't|"
-        r"so|very| etc|think|"
-        r"elderly people|man[\s\.]|men[\s\.]|women|women|"
-        r"it is|there (?:is|are)|you|people|"
-        r"several|good|get |"
-        r"we |(?:^| )I |"
-        r"previous work",
-        re.IGNORECASE)
-    print_log("Don't use", "warning", errors)
-    errors = checker_per_line.check(
-        r"And|But|Also")
-    print_log("Don't use", "warning", errors)
-    errors = checker_per_line.check(
-        r"resent")
-    print_log("Don't use 'resent' in except for abstract", "warning", errors)
-
-    errors = checker_per_line.check(
-        r" [0-9] ")
-    print_log("Spell out", "warning", errors)
-
-    errors = checker_per_line.check(
-        r"a lot of")
-    print_log("'a lot of' -> 'many' or 'much'", "warning", errors)
-
-    # INFO
-    errors = checker_per_line.check(
-        r"about")
-    print_log("'about' -> 'approximately'", "info", errors)
-
-    errors = checker_per_line.check(
-        r"correctly")
-    print_log("'correctly' -> 'accurately'", "info", errors)
-
-    errors = checker_per_line.check(
-        r"purpose")
-    print_log("'purpose' -> 'objective'", "info", errors)
+    # Check
+    for msg, args_dict in check_list.items():
+        check_args = get_check_args(args_dict)
+        errors = checker.check(**check_args)
+        print_log(msg, args_dict['level'], errors)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,121 @@
+# message:
+#   pattern:
+#   flags: "ignorecase" (optional)
+#   level: "error", "warning" or "info"
+#   check type: "line" or "file". default is "line"
+#   target: "all", "introduction" or "except for main". default is "all"
+
+
+### ERROR
+Remove an article:
+  pattern: 'each (?:a|an|the)|(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section)'
+  level: "error"
+
+a -> an:
+  pattern: '(?:^a|\sa) (?:[aiueo]|{\\it [aiueo])'
+  level: "error"
+  flags: "ignorecase"
+
+an -> a:
+  pattern: '(?:^an|\san) (?:[^aiueo]|{\\it [^aiueo])'
+  level: "error"
+  flags: "ignorecase"
+
+\cite{X}, \cite{Y} -> \cite{X, Y}:
+  pattern: '\\cite{\w+}, \\cite'
+  level: "error"
+
+Insert a period:
+  pattern: 'et al[^\.]|Fig[^u\.]|Eq[^s\.]|Eqs[^\.]'
+  level: "error"
+
+Insert a comma:
+  pattern: 'However |In addition |Additionally |Therefore |Here |Otherwise |e\.g\. |i\.e\. | [0-9]{4,}'
+  level: "error"
+
+Insert a half-width space:
+  pattern: '[0-9]+ms|\w\\cite|ROS2'
+  level: "error"
+
+Insert a tilde:
+  pattern: '(?:Fig\.|Figs\.|Figure\.|Figures\.|Eq\.|Eqs\.|Table\.|Tables\.|Algorithm\.|Algorithms\.)[^~]'
+  level: "error"
+
+Remove a half-width space:
+  pattern: '[0-9]+ %|\w :'
+  level: "error"
+
+Grammar errors:
+  pattern: '(?:are|is) (?:existing|having)|, (?:however|therefore|then|thus|thereby)'
+  level: "error"
+
+Uncountable noun:
+  pattern: 'works|information'
+  level: "error"
+
+== -> =:
+  pattern: '=='
+  level: "error"
+
+<= or >= -> \leq or \geq:
+  pattern: '<=|>='
+  level: "error"
+
+Acknowledgements -> Acknowledgments:
+  pattern: 'Acknowledgements'
+  level: "error"
+
+self-driving car -> autonomous vehicles:
+  pattern: 'self-driving car'
+  level: "error"
+
+was proposed -> has been proposed:
+  pattern: 'was proposed'
+  level: "error"
+
+GPS -> Global Navigation Satellite System (GNSS):
+  pattern: 'GPS'
+  level: "error"
+
+
+### WARNING
+Don't use:
+  pattern: don't|hasn't|doesn't|can't|(?:^| )so |very| etc|think|elderly people|man[\s\.]|men[\s\.]|women|women|it is|there (?:is|are)|you|people|several|good|get |we |(?:^| )I |previous work
+  level: "warning"
+  flags: "ignorecase"
+
+Don't use at the beginning of a sentence:
+  pattern: 'And|But|Also'
+  level: "warning"
+
+Don't use 'resent' in except for abstract:
+  pattern: '(?:^| )resent '
+  level: "warning"
+  target: "except for main"
+  flags: "ignorecase"
+
+Spell out:
+  pattern: ' [0-9] '
+  level: "warning"
+
+a lot of -> many or much:
+  pattern: 'a lot of'
+  level: "warning"
+  flags: "ignorecase"
+
+
+### INFO
+about -> approximately:
+  pattern: 'about'
+  level: "info"
+  flags: "ignorecase"
+
+correctly -> accurately:
+  pattern: "correctly"
+  level: "info"
+  flags: "ignorecase"
+
+purpose -> objective:
+  pattern: "purpose"
+  level: "info"
+  flags: "ignorecase"
