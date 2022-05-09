@@ -1,8 +1,8 @@
 # message:
-#   pattern:
+#   pattern: 'RAW_STRING'
 #   flags: "ignorecase" (optional)
 #   level: "error", "warning" or "info"
-#   check type: "line" or "file". default is "line"
+#   check type: "line". default is "line"
 #   target: "all", "introduction" or "except for main". default is "all"
 
 
@@ -50,8 +50,9 @@ Grammar errors:
   level: "error"
 
 Uncountable noun:
-  pattern: 'works|information'
+  pattern: 'works|these (?:work|information)'
   level: "error"
+  flags: "ignorecase"
 
 == -> =:
   pattern: '=='

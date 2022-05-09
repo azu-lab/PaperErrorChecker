@@ -3,7 +3,7 @@ import glob
 import os
 import re
 from logging import INFO, Formatter, StreamHandler, getLogger
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 import yaml
 
@@ -44,15 +44,28 @@ class Checker():
         self._target_paths["except for main"] = [p for p in file_paths
                                                  if 'Main' not in p]
 
+    def _option_perse(self, options: Dict) -> Tuple[str, Dict]:
+        args = {"pattern": options['pattern']}
+        flags_str = options.get("flags")
+        if(flags_str == "ignorecase"):
+            args['flags'] = re.IGNORECASE
+        else:
+            args['flags'] = None
+
+        args["target"] = options.get("target", "all")
+        check_type = options.get("check type", "line")
+
+        return check_type, args
+
     def check(
         self,
-        pattern: str,
-        check_type: str,
-        target: str,
-        flags=None,
+        options: Dict
     ) -> List[str]:
+        check_type, args_dict = self._option_perse(options)
         if(check_type == "line"):
-            return self._check_per_line(pattern, flags, target)
+            return self._check_per_line(**args_dict)
+        else:
+            raise NotImplementedError()
 
     def _check_per_line(
         self,
@@ -84,8 +97,6 @@ def print_log(
     msg: str,
     level: str,
     errors: List[str]
-
-
 ) -> None:
     if(errors):
         if(level == 'info'):
@@ -101,18 +112,6 @@ def print_log(
         print("------------------------------------------------------------")
 
 
-def get_check_args(args_dict: Dict) -> Dict:
-    args = {"pattern": args_dict['pattern']}
-    flags_str = args_dict.get("flags")
-    if(flags_str == "ignorecase"):
-        args['flags'] = re.IGNORECASE
-
-    args["target"] = args_dict.get("target", "all")
-    args["check_type"] = args_dict.get("check type", "line")
-
-    return args
-
-
 def main(check_dir):
     tex_paths = glob.glob(f"{check_dir}/**/*.tex",
                           recursive=True)
@@ -126,10 +125,9 @@ def main(check_dir):
         check_list = yaml.safe_load(f)
 
     # Check
-    for msg, args_dict in check_list.items():
-        check_args = get_check_args(args_dict)
-        errors = checker.check(**check_args)
-        print_log(msg, args_dict['level'], errors)
+    for msg, options in check_list.items():
+        errors = checker.check(options)
+        print_log(msg, options['level'], errors)
 
 
 if __name__ == "__main__":
