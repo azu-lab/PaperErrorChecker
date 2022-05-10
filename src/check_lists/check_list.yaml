@@ -3,7 +3,7 @@
 #   flags: "ignorecase" (optional)
 #   level: "error", "warning" or "info"
 #   check type: "line". default is "line"
-#   target: "all", "introduction" or "except for main". default is "all"
+#   target: "all", "introduction", "abstract" or "except for abstract". default is "all"
 
 
 ### ERROR
@@ -33,8 +33,13 @@ Insert a comma:
   pattern: 'However |In addition |Additionally |Therefore |Here |Otherwise |e\.g\. |i\.e\. | [0-9]{4,}'
   level: "error"
 
+Insert a hyphen:
+  pattern: 'many core (?:processor|platform|hardware)|real time'
+  level: "error"
+  flags: "ignorecase"
+
 Insert a half-width space:
-  pattern: '[0-9]+ms|\w\\cite|ROS2'
+  pattern: '[0-9]+ms|\w\\cite|ROS2|[^\s\(\{\}\),\.\$]\(.+\) | \(.+\)[^\s\(\{\}\),\.\$]'
   level: "error"
 
 Insert a tilde:
@@ -66,6 +71,11 @@ Acknowledgements -> Acknowledgments:
   pattern: 'Acknowledgements'
   level: "error"
 
+autonomous driving system -> self-driving system:
+  pattern: 'autonomous driving system'
+  level: "error"
+  flags: "ignorecase"
+
 self-driving car -> autonomous vehicles:
   pattern: 'self-driving car'
   level: "error"
@@ -77,6 +87,17 @@ was proposed -> has been proposed:
 GPS -> Global Navigation Satellite System (GNSS):
   pattern: 'GPS'
   level: "error"
+
+Don't refer to the figure in Introduction:
+  pattern: 'Fig'
+  level: "error"
+  target: "introduction"
+
+Don't use 'in this paper' in abstract:
+  pattern: 'in this paper'
+  level: "error"
+  target: "abstract"
+  flags: "ignorecase"
 
 
 ### WARNING
@@ -92,7 +113,7 @@ Don't use at the beginning of a sentence:
 Don't use 'resent' in except for abstract:
   pattern: '(?:^| )resent '
   level: "warning"
-  target: "except for main"
+  target: "except for abstract"
   flags: "ignorecase"
 
 Spell out:

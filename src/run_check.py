@@ -38,11 +38,12 @@ class Checker():
         file_paths: List[str]
     ) -> None:
         self._target_paths = {"all": file_paths}
-        intro_path = [p for p in file_paths
-                      if "Introduction" in p][0]
-        self._target_paths["introduction"] = intro_path
-        self._target_paths["except for main"] = [p for p in file_paths
-                                                 if 'Main' not in p]
+        self._target_paths["introduction"] = [p for p in file_paths
+                                              if "Introduction" in p]
+        self._target_paths["abstract"] = [p for p in file_paths
+                                          if "Abstract" in p]
+        self._target_paths["except for abstract"] = [p for p in file_paths
+                                                     if 'Abstract' not in p]
 
     def _option_perse(self, options: Dict) -> Tuple[str, Dict]:
         args = {"pattern": options['pattern']}
