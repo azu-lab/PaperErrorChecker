@@ -8,11 +8,11 @@
 
 ### ERROR
 Remove an article:
-  pattern: 'each (?:a|an|the)|(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section)'
+  pattern: 'each (?:a|an|the)|(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section|researcher)'
   level: "error"
 
 a -> an:
-  pattern: '(?:^a|\sa) (?:[aiueo]|{\\it [aiueo])'
+  pattern: '(?:^a|\sa) (?:[aiueo]|{\\it [aiueo]|np-|SPU)'
   level: "error"
   flags: "ignorecase"
 
@@ -30,32 +30,37 @@ Insert a period:
   level: "error"
 
 Insert a comma:
-  pattern: 'However |In addition |Additionally |Therefore |Here |Otherwise |e\.g\. |i\.e\. | [0-9]{4,}'
+  pattern: 'However |In addition |Additionally |Therefore |Here |Otherwise |e\.g\. |i\.e\. | [0-9]{4,}|Science and Engineering[^,]'
   level: "error"
 
 Insert a hyphen:
-  pattern: 'many core (?:processor|platform|hardware)|real time'
+  pattern: 'many core (?:processor|platform|hardware)|real time|high quality|large scale|self driving system|open source'
   level: "error"
   flags: "ignorecase"
 
 Insert a half-width space:
-  pattern: '[0-9]+ms|\w\\cite|ROS2|[^\s\(\{\}\),\.\$]\(.+\) | \(.+\)[^\s\(\{\}\),\.\$]'
+  pattern: '[0-9]+(?:ms|mb)|\w\\cite|ROS2|[^\s\(\{\}\),\.\$]\(.+\) | \(.+\)[^\s\(\{\}\),\.\$]|No\.\S|,\S|(?:line|lines)[0-9]|:\S'
   level: "error"
+  flags: "ignorecase"
 
 Insert a tilde:
   pattern: '(?:Fig\.|Figs\.|Figure\.|Figures\.|Eq\.|Eqs\.|Table\.|Tables\.|Algorithm\.|Algorithms\.)[^~]'
   level: "error"
 
+Insert parentheses:
+  pattern: '(?:Eq.|Eqs.)~[^\(]'
+  level: "error"
+
 Remove a half-width space:
-  pattern: '[0-9]+ %|\w :'
+  pattern: '[0-9]+ %|\w :| ,| \.'
   level: "error"
 
 Grammar errors:
-  pattern: '(?:are|is) (?:existing|having)|, (?:however|therefore|then|thus|thereby)'
+  pattern: '(?:are|is) (?:existing|having)|, (?:however|therefore|then|thus|thereby|that)'
   level: "error"
 
 Uncountable noun:
-  pattern: 'works|these (?:work|information)'
+  pattern: 'works|(?:these|a|an|various) (?:work|information|communication)'
   level: "error"
   flags: "ignorecase"
 
@@ -99,10 +104,15 @@ Don't use 'in this paper' in abstract:
   target: "abstract"
   flags: "ignorecase"
 
+in -> on:
+  pattern: 'in the (?:left|right) side of Fig'
+  level: "error"
+  flags: "ignorecase"
+
 
 ### WARNING
 Don't use:
-  pattern: don't|hasn't|doesn't|can't|(?:^| )so |very| etc|think|elderly people|man[\s\.]|men[\s\.]|women|women|it is|there (?:is|are)|you|people|several|good|get |we |(?:^| )I |previous work
+  pattern: don't|hasn't|doesn't|can't|(?:^| )so |(?:^| )very | etc|think|elderly people|man[\s\.]|men[\s\.]|women|women|(?:^| )it is |there (?:is|are)|you|people|several|good|get |(?:^| )we |(?:^| )I |previous work
   level: "warning"
   flags: "ignorecase"
 
@@ -139,5 +149,10 @@ correctly -> accurately:
 
 purpose -> objective:
   pattern: "purpose"
+  level: "info"
+  flags: "ignorecase"
+
+at the same time -> simultaneously:
+  pattern: 'at the same time'
   level: "info"
   flags: "ignorecase"
