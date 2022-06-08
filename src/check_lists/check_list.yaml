@@ -8,7 +8,7 @@
 
 ### ERROR
 Remove an article:
-  pattern: 'each (?:a|an|the)|(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section|researcher)'
+  pattern: 'each (?:a|an|the) |(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section|researcher)'
   level: "error"
 
 a -> an:
@@ -34,7 +34,7 @@ Insert a comma:
   level: "error"
 
 Insert a hyphen:
-  pattern: 'many core (?:processor|platform|hardware)|real time|high quality|large scale|self driving system|open source'
+  pattern: 'many core (?:processor|platform|hardware)|real time|high quality|large scale|self driving system|open source|worst case'
   level: "error"
   flags: "ignorecase"
 
@@ -56,7 +56,7 @@ Remove a half-width space:
   level: "error"
 
 Grammar errors:
-  pattern: '(?:are|is) (?:existing|having)|, (?:however|therefore|then|thus|thereby|that)'
+  pattern: '(?:are|is) (?:existing|having)|, (?:however|therefore|then|thus|thereby|that|in order to)'
   level: "error"
 
 Uncountable noun:
@@ -112,7 +112,7 @@ in -> on:
 
 ### WARNING
 Don't use:
-  pattern: don't|hasn't|doesn't|can't|(?:^| )so |(?:^| )very | etc|think|elderly people|man[\s\.]|men[\s\.]|women|women|(?:^| )it is |there (?:is|are)|you|people|several|good|get |(?:^| )we |(?:^| )I |previous work
+  pattern: don't|hasn't|doesn't|can't|(?:^| )so |(?:^| )very | etc|think|elderly people|man[\s\.]|men[\s\.]|women|women|(?:^| )it is |there (?:is|are)|you|people|several|good|get |(?:^| )we |(?:^| )I |previous work|like
   level: "warning"
   flags: "ignorecase"
 

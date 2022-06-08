@@ -2,20 +2,12 @@ import argparse
 import glob
 import os
 import re
-from logging import INFO, Formatter, StreamHandler, getLogger
+from logging import getLogger
 from typing import Dict, List, Tuple
 
 import yaml
 
-# Logger setting
-handler = StreamHandler()
-handler.setLevel(INFO)
-fmt = '[%(levelname)s] %(message)s'
-formatter = Formatter(fmt)
-handler.setFormatter(formatter)
-logger = getLogger()
-logger.setLevel(INFO)
-logger.addHandler(handler)
+logger = getLogger(__name__)
 
 
 def option_parser():
@@ -37,26 +29,14 @@ class Checker():
         self,
         file_paths: List[str]
     ) -> None:
+        # Create target path dict
         self._target_paths = {"all": file_paths}
         self._target_paths["introduction"] = [p for p in file_paths
-                                              if "Introduction" in p]
+                                              if "intro" in p.lower()]
         self._target_paths["abstract"] = [p for p in file_paths
-                                          if "Abstract" in p]
+                                          if "abst" in p.lower()]
         self._target_paths["except for abstract"] = [p for p in file_paths
-                                                     if 'Abstract' not in p]
-
-    def _option_perse(self, options: Dict) -> Tuple[str, Dict]:
-        args = {"pattern": options['pattern']}
-        flags_str = options.get("flags")
-        if(flags_str == "ignorecase"):
-            args['flags'] = re.IGNORECASE
-        else:
-            args['flags'] = None
-
-        args["target"] = options.get("target", "all")
-        check_type = options.get("check type", "line")
-
-        return check_type, args
+                                                     if "abst" not in p.lower()]
 
     def check(
         self,
@@ -68,6 +48,22 @@ class Checker():
         else:
             raise NotImplementedError()
 
+    def _option_perse(
+        self,
+        options: Dict
+    ) -> Tuple[str, Dict]:
+        args = {"pattern": options["pattern"]}
+        flags_str = options.get("flags")
+        if(flags_str == "ignorecase"):
+            args["flags"] = re.IGNORECASE
+        else:
+            args["flags"] = None
+
+        args["target"] = options.get("target", "all")
+        check_type = options.get("check type", "line")
+
+        return check_type, args
+
     def _check_per_line(
         self,
         pattern: str,
@@ -76,7 +72,7 @@ class Checker():
     ) -> List[str]:
         errors = []
         for tex_path in self._target_paths[target]:
-            with open(tex_path, "r", encoding='utf-8') as f:
+            with open(tex_path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
             for line_count, line in enumerate(lines):
                 if(flags):
@@ -85,7 +81,7 @@ class Checker():
                     result = re.findall(pattern, line)
                 if(result):
                     for match in result:
-                        errors.append(' | '.join([
+                        errors.append(" | ".join([
                             os.path.basename(tex_path),
                             str(line_count+1),
                             match])
@@ -100,16 +96,17 @@ def print_log(
     errors: List[str]
 ) -> None:
     if(errors):
-        if(level == 'info'):
+        if(level == "info"):
             logger.info(msg)
-        elif(level == 'warning'):
+        elif(level == "warning"):
             logger.warning(msg)
-        elif(level == 'error'):
+        elif(level == "error"):
             logger.error(msg)
         else:
             raise NotImplementedError
 
-        [print(f"\t{error}") for error in errors]
+        for error in errors:
+            print(f"\t{error}")
         print("------------------------------------------------------------")
 
 
@@ -121,14 +118,14 @@ def main(check_dir):
     # Load check list
     with open(
         f"{os.path.dirname(__file__)}/check_lists/check_list.yaml",
-        'r'
+        "r"
     ) as f:
         check_list = yaml.safe_load(f)
 
     # Check
     for msg, options in check_list.items():
         errors = checker.check(options)
-        print_log(msg, options['level'], errors)
+        print_log(msg, options["level"], errors)
 
 
 if __name__ == "__main__":
