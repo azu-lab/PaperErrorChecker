@@ -76,15 +76,20 @@ class Checker():
                 lines = f.readlines()
             for line_count, line in enumerate(lines):
                 if(flags):
-                    result = re.findall(pattern, line, flags)
+                    matches = re.finditer(pattern, line, flags)
                 else:
-                    result = re.findall(pattern, line)
-                if(result):
-                    for match in result:
+                    matches = re.finditer(pattern, line)
+                if(matches):
+                    for match in matches:
+                        head = line[:match.start()]
+                        tail = line[match.end():]
+                        match_str = line[match.start():match.end()]
+                        out = head + "\033[91m" + match_str + "\033[0m" + tail
+
                         errors.append(" | ".join([
                             os.path.basename(tex_path),
                             str(line_count+1),
-                            match])
+                            out])
                         )
 
         return errors
