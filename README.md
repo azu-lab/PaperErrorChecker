@@ -8,7 +8,8 @@
 
 コマンドの実行結果の例は以下です
 
-![スクリーンショット 2022-06-08 160901](https://user-images.githubusercontent.com/55824710/172570896-c274ab77-fbb5-44f1-9b80-e4404c813cfb.png)
+![スクリーンショット 2022-06-09 085657](https://user-images.githubusercontent.com/55824710/172736685-6d2cd208-fb8f-48d2-bf45-471a820f2c39.png)
+
 
 
 ## Setup Flow
