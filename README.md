@@ -19,7 +19,7 @@ cd Paper_Error_Checker
 ./setup.bash
 ```
 
-## Run
+## Usage
 `bash run_checker.bash -d [PATH]`
 - [PATH]: チェック対象の .tex ファイルを全て含んだディレクトリへのパス
 
@@ -33,6 +33,8 @@ message:
   target: "all", "introduction", or "abstract"
   flags: "ignorecase" (optional)
 ```
+- message: ユーザに表示したい警告メッセージや、具体的な修正方法
+    - (例) a -> an
 - [RAW_STRING] : 検出したい正規表現のパターン
     - (例): 'a 母音で始まる単語の冠詞' を検出したい場合 ->
     `'(?:^a|\sa) (?:[aiueo]|{\\it [aiueo]'`
@@ -46,3 +48,12 @@ message:
     - "abstract": abst がファイル名に入っている .tex ファイルのみをチェック
 - flags: 正規表現のマッチ判定に使用されるオプション
     - "ignorecase": 大文字・小文字を区別しない
+
+## Note
+このツールのチェックの精度は正規表現のパターンに依存しており、現在は Atsushi がスピード重視で書いたものなので、誤検出が多数あります。
+ただし、パターンを完璧にするのは難易度が高いので、多少誤検出があったとしても、ユーザが判断すれば良いかなと考えています。
+
+### Development ideas
+機能拡張のアイデアです。工数のわりにあまり恩恵がなさそうなので、未着手です。
+- 誤検出を無くし、自動で置換できるようにする
+- [spaCy](https://spacy.io/api) などの自然言語処理ライブラリを絡めれば、時制・3単現のチェックとかもできそう
