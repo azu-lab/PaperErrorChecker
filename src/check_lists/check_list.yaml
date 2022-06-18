@@ -7,36 +7,13 @@
 
 
 ### ERROR
-Remove an article:
-  pattern: 'each (?:a|an|the) |(?:[aA]|[aA]n|[tT]he) (?:Fig|Table|Eq|Algorithm|Section|researcher)'
-  level: "error"
-
-a -> an:
-  pattern: '(?:^a|\sa) (?:[aiueo]|{\\it [aiueo]|np-|SPU)'
-  level: "error"
-  flags: "ignorecase"
-
-an -> a:
-  pattern: '(?:^an|\san) (?:[^aiueo]|{\\it [^aiueo])'
-  level: "error"
-  flags: "ignorecase"
-
 \cite{X}, \cite{Y} -> \cite{X, Y}:
   pattern: '\\cite{\w+}, \\cite'
   level: "error"
 
 Insert a period:
-  pattern: 'et al[^\.]|Fig[^u\.]|Eq[^s\.]|Eqs[^\.]'
+  pattern: ' et al[^\.]|Fig[^u\.]|Eq[^s\.]|Eqs[^\.]'
   level: "error"
-
-Insert a comma:
-  pattern: 'However |In addition |Additionally |Therefore |Here |Otherwise |e\.g\. |i\.e\. | [0-9]{4,}|Science and Engineering[^,]'
-  level: "error"
-
-Insert a hyphen:
-  pattern: 'many core (?:processor|platform|hardware)|real time|high quality|large scale|self driving system|open source|worst case'
-  level: "error"
-  flags: "ignorecase"
 
 Insert a half-width space:
   pattern: '[0-9]+(?:ms|mb)|\w\\cite|ROS2|[^\s\(\{\}\),\.\$]\(.+\) | \(.+\)[^\s\(\{\}\),\.\$]|No\.\S|,\S|(?:line|lines)[0-9]|:\S'
@@ -54,15 +31,6 @@ Insert parentheses:
 Remove a half-width space:
   pattern: '[0-9]+ %|\w :| ,| \.'
   level: "error"
-
-Grammar errors:
-  pattern: '(?:are|is) (?:existing|having)|, (?:however|therefore|then|thus|thereby|that|in order to)'
-  level: "error"
-
-Uncountable noun:
-  pattern: 'works|(?:these|a|an|various) (?:work|information|communication)'
-  level: "error"
-  flags: "ignorecase"
 
 == -> =:
   pattern: '=='
@@ -102,11 +70,6 @@ Don't use 'in this paper' in abstract:
   pattern: 'in this paper'
   level: "error"
   target: "abstract"
-  flags: "ignorecase"
-
-in -> on:
-  pattern: 'in the (?:left|right) side of Fig'
-  level: "error"
   flags: "ignorecase"
 
 
