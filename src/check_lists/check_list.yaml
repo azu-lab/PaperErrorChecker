@@ -12,7 +12,7 @@
   level: "error"
 
 Insert a period:
-  pattern: ' et al[^\.]|Fig[^u\.]|Eq[^s\.]|Eqs[^\.]'
+  pattern: ' et al[^\.]|Fig[^su\.]|Eq[^s\.]|Eqs[^\.]'
   level: "error"
 
 Insert a half-width space:
@@ -75,7 +75,7 @@ Don't use 'in this paper' in abstract:
 
 ### WARNING
 Don't use:
-  pattern: don't|hasn't|doesn't|can't|(?:^| )so |(?:^| )very | etc|think|elderly people|man[\s\.]|men[\s\.]|women|women|(?:^| )it is |there (?:is|are)|you|people|several|good|get |(?:^| )we |(?:^| )I |previous work|like
+  pattern: don't|hasn't|doesn't|can't|(?:^| )so |(?:^| )very | etc|(?:^| )think|elderly people|(?:^| )man[\s\.]|(?:^| )men[\s\.]|(?:^| )women|(?:^| )women|(?:^| )it is |there (?:is|are)|(?:^| )you|(?:^| )people|(?:^| )several|(?:^| )good|(?:^| )get |(?:^| )we |(?:^| )I |previous work|(?:^| )like
   level: "warning"
   flags: "ignorecase"
 
