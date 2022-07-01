@@ -1,0 +1,4 @@
+Don't use 'paper':
+  pattern: '(?:^| )paper'
+  level: "error"
+  flags: "ignorecase"

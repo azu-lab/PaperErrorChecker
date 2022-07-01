@@ -2,7 +2,6 @@
 #   pattern: 'RAW_STRING'
 #   flags: "ignorecase" (optional)
 #   level: "error", "warning" or "info"
-#   check type: "line". default is "line"
 #   target: "all", "introduction", "abstract" or "except for abstract". default is "all"
 
 
@@ -65,12 +64,6 @@ Don't refer to the figure in Introduction:
   pattern: 'Fig'
   level: "error"
   target: "introduction"
-
-Don't use 'in this paper' in abstract:
-  pattern: 'in this paper'
-  level: "error"
-  target: "abstract"
-  flags: "ignorecase"
 
 
 ### WARNING

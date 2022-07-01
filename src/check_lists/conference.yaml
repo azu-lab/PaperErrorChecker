@@ -1,0 +1,5 @@
+Don't use 'in this paper' in abstract:
+  pattern: 'in this paper'
+  level: "error"
+  target: "abstract"
+  flags: "ignorecase"
