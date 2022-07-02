@@ -1,0 +1,110 @@
+# message:
+#   pattern: 'RAW_STRING'
+#   level: "error", "warning" or "info"
+#   target: "all", "introduction", "abstract" or "except for abstract". default is "all"
+#   flags: "ignorecase" (optional)
+
+
+### ERROR
+\cite{X}, \cite{Y} -> \cite{X, Y}:
+  pattern: '\\cite{\w+}[, ]*\\cite'
+  level: "error"
+
+Insert a period:
+  pattern: ' et al[^\.]|Fig[^su\.]|Figs[^\.]|Eq[^su\.]|Eqs[^\.]'
+  level: "error"
+
+Insert a half-width space:
+  pattern: '[0-9]+(?:ms|mb)|\w\\cite|ROS2|[^\s\(\{\}\),\.\$]\(.+\) | \(.+\)[^\s\(\{\}\),\.\$]|No\.\S|,\S|(?:line|lines)[0-9]|:\S'
+  level: "error"
+  flags: "ignorecase"
+
+Insert a tilde:
+  pattern: '(?:Fig\.|Figs\.|Figure\.|Figures\.|Eq\.|Eqs\.|Table\.|Tables\.|Algorithm\.|Algorithms\.)[^~]'
+  level: "error"
+
+Insert parentheses:
+  pattern: '(?:Eq.|Eqs.)[~ ]*[^\(]'
+  level: "error"
+
+Remove a half-width space:
+  pattern: '[0-9]+ %|\w :| ,| \.'
+  level: "error"
+
+== -> =:
+  pattern: '=='
+  level: "error"
+
+<= or >= -> \leq or \geq:
+  pattern: '<=|>='
+  level: "error"
+
+Acknowledgements -> Acknowledgments:
+  pattern: 'Acknowledgements'
+  level: "error"
+
+autonomous driving system -> self-driving system:
+  pattern: 'autonomous driving system'
+  level: "error"
+  flags: "ignorecase"
+
+self-driving car -> autonomous vehicles:
+  pattern: 'self-driving car'
+  level: "error"
+
+GPS -> Global Navigation Satellite System (GNSS):
+  pattern: 'GPS'
+  level: "error"
+
+Don't refer to the figure in Introduction:
+  pattern: 'Fig'
+  level: "error"
+  target: "introduction"
+
+
+### WARNING
+Don't use:
+  pattern: don't|hasn't|doesn't|can't|(?:^| )so |(?:^| )very | etc|(?:^| )think|elderly people|(?:^| )man[\s\.]|(?:^| )men[\s\.]|(?:^| )women|(?:^| )women|(?:^| )it is |there (?:is|are)|(?:^| )you|(?:^| )people|(?:^| )several|(?:^| )good|(?:^| )get |(?:^| )we |(?:^| )I |previous work|(?:^| )like
+  level: "warning"
+  flags: "ignorecase"
+
+Don't use at the beginning of a sentence:
+  pattern: 'And|But|Also'
+  level: "warning"
+
+Don't use 'resent' in except for abstract:
+  pattern: '(?:^| )resent '
+  level: "warning"
+  target: "except for abstract"
+  flags: "ignorecase"
+
+Spell out:
+  pattern: ' [0-9] '
+  level: "warning"
+
+a lot of -> many or much:
+  pattern: 'a lot of'
+  level: "warning"
+  flags: "ignorecase"
+
+
+### INFO
+about -> approximately:
+  pattern: 'about'
+  level: "info"
+  flags: "ignorecase"
+
+correctly -> accurately:
+  pattern: "correctly"
+  level: "info"
+  flags: "ignorecase"
+
+purpose -> objective:
+  pattern: "purpose"
+  level: "info"
+  flags: "ignorecase"
+
+at the same time -> simultaneously:
+  pattern: 'at the same time'
+  level: "info"
+  flags: "ignorecase"

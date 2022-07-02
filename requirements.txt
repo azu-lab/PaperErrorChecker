@@ -1,0 +1,7 @@
+###### Requirements without Version Specifiers ######`
+PyYAML
+pytest
+pytest-mock
+
+###### Requirements with Version Specifiers ######`
+

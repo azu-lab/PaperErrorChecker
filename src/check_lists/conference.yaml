@@ -1,0 +1,12 @@
+Don't use 'Chapter':
+  pattern: '(?:^| )chapter |\\chapter'
+  level: "error"
+  flags: "ignorecase"
+
+Don't use 'I':
+  pattern: '(?:^| )I '
+  level: "error"
+
+Don't use 'thesis':
+  pattern: '(?:^| )thesis '
+  level: "error"
