@@ -1,17 +1,17 @@
 # message:
 #   pattern: 'RAW_STRING'
-#   flags: "ignorecase" (optional)
 #   level: "error", "warning" or "info"
 #   target: "all", "introduction", "abstract" or "except for abstract". default is "all"
+#   flags: "ignorecase" (optional)
 
 
 ### ERROR
 \cite{X}, \cite{Y} -> \cite{X, Y}:
-  pattern: '\\cite{\w+}, \\cite'
+  pattern: '\\cite{\w+}[, ]*\\cite'
   level: "error"
 
 Insert a period:
-  pattern: ' et al[^\.]|Fig[^su\.]|Eq[^s\.]|Eqs[^\.]'
+  pattern: ' et al[^\.]|Fig[^su\.]|Figs[^\.]|Eq[^su\.]|Eqs[^\.]'
   level: "error"
 
 Insert a half-width space:
@@ -24,7 +24,7 @@ Insert a tilde:
   level: "error"
 
 Insert parentheses:
-  pattern: '(?:Eq.|Eqs.)~[^\(]'
+  pattern: '(?:Eq.|Eqs.)[~ ]*[^\(]'
   level: "error"
 
 Remove a half-width space:
@@ -50,10 +50,6 @@ autonomous driving system -> self-driving system:
 
 self-driving car -> autonomous vehicles:
   pattern: 'self-driving car'
-  level: "error"
-
-was proposed -> has been proposed:
-  pattern: 'was proposed'
   level: "error"
 
 GPS -> Global Navigation Satellite System (GNSS):

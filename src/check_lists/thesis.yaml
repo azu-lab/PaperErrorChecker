@@ -2,3 +2,22 @@ Don't use 'paper':
   pattern: '(?:^| )paper'
   level: "error"
   flags: "ignorecase"
+
+Don't use 'we':
+  pattern: '(?:^| )we '
+  level: "error"
+  flags: "ignorecase"
+
+Don't use 'section':
+  pattern: '(?:^| )section |\\section'
+  level: "error"
+  flags: "ignorecase"
+
+Don't use 'Fig.':
+  pattern: 'Fig.|Figs.'
+  level: "error"
+
+Don't use 'Proc.':
+  pattern: 'Proc.'
+  level: "error"
+  flags: "ignorecase"
