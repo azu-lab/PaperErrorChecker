@@ -69,7 +69,7 @@ class TestChecker:
                    "level": "error",
                    "flags": "ignorecase"}
         p, l, t, f = Checker._perse_options(options)
-        assert t == "all"
+        assert t != "all"
 
         caplog.clear()
         options = {"pattern": 'XXX',
