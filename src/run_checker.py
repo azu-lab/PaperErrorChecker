@@ -2,12 +2,20 @@ import argparse
 import glob
 import os
 import re
-from logging import getLogger
+from logging import INFO, Formatter, StreamHandler, getLogger
 from typing import Any, Dict, List, Tuple
 
 import yaml
 
-logger = getLogger(__name__)
+# Logger setting
+handler = StreamHandler()
+handler.setLevel(INFO)
+fmt = "[%(levelname)s] %(message)s"
+formatter = Formatter(fmt)
+handler.setFormatter(formatter)
+logger = getLogger()
+logger.setLevel(INFO)
+logger.addHandler(handler)
 
 
 class Checker:
