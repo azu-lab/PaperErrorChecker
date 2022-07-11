@@ -153,4 +153,8 @@ def option_parser():
 
 if __name__ == "__main__":
     check_dir, format = option_parser()
+    if not os.path.exists(check_dir):
+        logger.error('Directory not found.')
+        exit(1)
+
     Checker(check_dir, format)
