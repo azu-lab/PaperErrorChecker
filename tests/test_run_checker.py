@@ -13,7 +13,7 @@ class TestChecker:
                                    "XXX\\Abstract.tex",
                                    "XXX\\Evaluation.tex"])
 
-        target_path_dict = Checker._get_target_path_dict("check_dir")
+        target_path_dict = Checker._get_tex_path_dict("check_dir")
         assert ("XXX\\system_model.tex" in target_path_dict["all"]
                 and "XXX\\Introduction.tex" in target_path_dict["all"]
                 and "XXX\\Abstract.tex" in target_path_dict["all"]
