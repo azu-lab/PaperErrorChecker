@@ -8,7 +8,8 @@ def test_cite(mocker, capfd):
     mocker.patch("src.run_checker.Checker._get_check_lists",
                  return_value=get_one_check_dict(
                      "common", r"\cite{X}, \cite{Y} -> \cite{X, Y}"))
-    Checker(f"{os.path.dirname(__file__)}/test_common", "")
+    checker = Checker(f"{os.path.dirname(__file__)}/test_common", "")
+    checker.check()
     out, err = capfd.readouterr()
     assert "| 1 |" in out
     assert "| 2 |" in out
@@ -20,7 +21,8 @@ def test_insert_a_period(mocker, capfd):
     mocker.patch("src.run_checker.Checker._get_check_lists",
                  return_value=get_one_check_dict(
                      "common", r"Insert a period"))
-    Checker(f"{os.path.dirname(__file__)}/test_common", "")
+    checker = Checker(f"{os.path.dirname(__file__)}/test_common", "")
+    checker.check()
     out, err = capfd.readouterr()
     assert "| 7 |" not in out
     assert "| 8 |" in out
