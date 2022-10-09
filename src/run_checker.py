@@ -16,13 +16,14 @@ class Checker:
         check_dir: str,
         format: str
     ) -> None:
-        target_path_dict = Checker._get_target_path_dict(check_dir)
-        check_lists = Checker._get_check_lists(format)
+        self._tex_path_dict = Checker._get_tex_path_dict(check_dir)
+        self._check_lists = Checker._get_check_lists(format)
 
-        for msg, options in check_lists.items():
+    def check(self) -> None:
+        for msg, options in self._check_lists.items():
             pattern, level, target, flags = Checker._perse_options(options)
             errors = []
-            for tex_path in target_path_dict[target]:
+            for tex_path in self._tex_path_dict[target]:
                 with open(tex_path, "r", encoding="utf-8") as f:
                     lines = f.readlines()
                 for line_count, line in enumerate(lines):
@@ -32,17 +33,16 @@ class Checker:
                         matches = re.finditer(pattern, line)
                     if matches:
                         for match in matches:
-                            head = line[:match.start()]
-                            tail = line[match.end():]
-                            match_str = line[match.start():match.end()]
-                            out = (head + "\033[91m"
-                                   + match_str + "\033[0m" + tail)
-
+                            red_marked_line = (
+                                line[:match.start()] + "\033[91m"
+                                + line[match.start():match.end()]
+                                + "\033[0m" + line[match.end():]
+                            )
                             errors.append(" | ".join([
                                 os.path.basename(tex_path),
                                 str(line_count+1),
-                                out])
-                            )
+                                red_marked_line
+                            ]))
 
             Checker._print_log(msg, level, errors)
 
@@ -113,7 +113,7 @@ class Checker:
         return check_lists
 
     @staticmethod
-    def _get_target_path_dict(
+    def _get_tex_path_dict(
         check_dir: str
     ) -> Dict:
         tex_paths = glob.glob(f"{check_dir}/**/*.tex",
@@ -153,4 +153,5 @@ def option_parser():
 
 if __name__ == "__main__":
     check_dir, format = option_parser()
-    Checker(check_dir, format)
+    checker = Checker(check_dir, format)
+    checker.check()
