@@ -51,13 +51,6 @@ do
 done
 
 
-### check directory exists
-if [ ! -d $CHECK_DIR ]; then
-    echo "[Error] Directory not found."
-    exit 1
-fi
-
-
 ### run checker
 export PYTHONPATH="$(dirname $0)/"
 python3 ${PYTHON_SCRIPT_DIR}/run_checker.py --check_dir "${CHECK_DIR}" --format "${FORMAT}"
