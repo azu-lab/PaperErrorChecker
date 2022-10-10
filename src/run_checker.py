@@ -35,6 +35,8 @@ class Checker:
                 with open(tex_path, "r", encoding="utf-8") as f:
                     lines = f.readlines()
                 for line_count, line in enumerate(lines):
+                    if line.replace(' ', '')[0] == '%':
+                        continue  # skip comment out
                     if flags:
                         matches = re.finditer(pattern, line, flags)
                     else:
