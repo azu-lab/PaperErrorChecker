@@ -15,7 +15,7 @@
 
 ## Setup Flow
 ```
-git clone https://github.com/atsushi421/PaperErrorChecker.git
+git clone https://github.com/azu-lab/PaperErrorChecker.git
 cd PaperErrorChecker
 ./setup.bash
 ```
