@@ -15,13 +15,15 @@
 
 ## Setup Flow
 ```
-git clone https://github.com/azu-lab/PaperErrorChecker.git
-cd PaperErrorChecker
-./setup.bash
+$ git clone https://github.com/azu-lab/PaperErrorChecker.git
+$ cd PaperErrorChecker
+$ chmod 755 setup.bash
+$ chmod 755 run_checker.bash
+$ ./setup.bash
 ```
 
 ## Usage
-`./run_checker.bash -d [PATH] -f [FORMAT]`
+`$ ./run_checker.bash -d [PATH] -f [FORMAT]`
 - [PATH]: チェック対象の .tex ファイルを全て含んだディレクトリへのパス
 - [FORMAT]：投稿先に合わせてチェックリストを切り替える。現在サポートしているのは以下
     - conference: 国際学会
