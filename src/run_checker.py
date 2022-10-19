@@ -35,8 +35,8 @@ class Checker:
                 with open(tex_path, "r", encoding="utf-8") as f:
                     lines = f.readlines()
                 for line_count, line in enumerate(lines):
-                    if line.replace(' ', '')[0] == '%':
-                        continue  # skip comment out
+                    if Checker._is_skip_line(line):
+                        continue
                     if flags:
                         matches = re.finditer(pattern, line, flags)
                     else:
@@ -55,6 +55,40 @@ class Checker:
                             ]))
 
             Checker._print_log(msg, level, errors)
+
+    @staticmethod
+    def _is_skip_line(line: str) -> bool:
+        line = line.replace(' ', '')
+
+        skip_heads = [
+            r'\usepackage',
+            r'\graphicspath',
+            r'\hypersetup',
+            r'\urlstyle',
+            r'\title',
+            r'\author',
+            r'\documentclass',
+            r'\theoremstyle',
+            r'\newtheorem',
+            r'\algdef',
+            r'\algnewcommand',
+            r'\setcounter',
+            r'\renewcommand',
+            r'\newcommand',
+            r'\def',
+            r'\history',
+            r'\doi',
+            r'\corresp',
+            r'\input',
+            r'\label',
+            r'\bibliography',
+            r'%'
+        ]
+        for skip_head in skip_heads:
+            if line.startswith(skip_head):
+                return True
+
+        return False
 
     @staticmethod
     def _print_log(
