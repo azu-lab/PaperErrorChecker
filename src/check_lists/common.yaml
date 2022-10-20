@@ -24,7 +24,7 @@ Insert a tilde:
   level: "error"
 
 Insert parentheses:
-  pattern: '(?:Eq.|Eqs.)[~ ]*[^\(]'
+  pattern: '(?:Eq.|Eqs.)[~ ]+[^\(]'
   level: "error"
 
 Remove a half-width space:
