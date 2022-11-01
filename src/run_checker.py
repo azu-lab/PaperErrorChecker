@@ -10,8 +10,10 @@ import yaml
 # Logger setting
 handler = StreamHandler()
 handler.setLevel(INFO)
-fmt = "[%(levelname)s] %(message)s"
-formatter = Formatter(fmt)
+fmt = '%(levelname)-8s: %(asctime)s | %(message)s'
+formatter = Formatter(
+    fmt,
+    datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
 logger = getLogger()
 logger.setLevel(INFO)
@@ -98,11 +100,11 @@ class Checker:
     ) -> None:
         if errors:
             if level == "info":
-                logger.info(msg)
+                print(f'[INFO] {msg}')
             elif level == "warning":
-                logger.warning(msg)
+                print(f'[WARNING] {msg}')
             elif level == "error":
-                logger.error(msg)
+                print(f'[ERROR] {msg}')
             else:
                 raise NotImplementedError
 
